@@ -1,13 +1,13 @@
 package ru.leonidivankin.kotlinforandroid.ui.main
 
 import android.os.Bundle
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.GridLayoutManager
 import kotlinx.android.synthetic.main.activity_main.*
 import ru.leonidivankin.kotlinforandroid.R
+import ru.leonidivankin.kotlinforandroid.ui.note.NoteActivity
 
 class MainActivity : AppCompatActivity() {
 
@@ -22,12 +22,18 @@ class MainActivity : AppCompatActivity() {
         viewModel = ViewModelProviders.of(this).get(MainViewModel::class.java)
 
         rv_notes.layoutManager = GridLayoutManager(this, 2)
-        adapter = NotesRvAdapter()
+        adapter = NotesRvAdapter {
+            NoteActivity.start(this, it)
+        }
         rv_notes.adapter = adapter
 
-        viewModel.viewState().observe(this, Observer<MainViewState> {it ->
+        viewModel.viewState().observe(this, Observer { it ->
             it?.let { adapter.notes = it.notes }
         })
+
+        fab.setOnClickListener {
+            NoteActivity.start(this)
+        }
 
 
     }
