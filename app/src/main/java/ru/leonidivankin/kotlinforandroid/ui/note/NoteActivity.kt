@@ -94,7 +94,7 @@ class NoteActivity : BaseActivity<Note?, NoteViewState>() {
                 Note.Color.VIOLET -> R.color.violet
                 Note.Color.PINK -> R.color.pink
             }
-            toolbar.setBackgroundColor(ContextCompat.getColor(this, color))
+//            toolbar.setBackgroundColor(ContextCompat.getColor(this, color))
 
         }
 
