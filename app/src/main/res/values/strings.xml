@@ -4,4 +4,5 @@
     <string name="main_title">Заметки</string>
     <string name="str_title">Заголовок</string>
     <string name="str_text">Текст</string>
+    <string name="menu_logout">LogOut</string>
 </resources>
