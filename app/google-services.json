@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "240621150098",
+    "firebase_url": "https://kotlinforandroid.firebaseio.com",
+    "project_id": "kotlinforandroid",
+    "storage_bucket": "kotlinforandroid.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:240621150098:android:c10bdb16b4ba66792eab4b",
+        "android_client_info": {
+          "package_name": "ru.leonidivankin.kotlinforandroid"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "240621150098-fddqabolglq9tii2r3fd7fugsemlfrpp.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBhjdxd0db2pTN1oDVPrlcE55oVWKnX670"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "240621150098-fddqabolglq9tii2r3fd7fugsemlfrpp.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
