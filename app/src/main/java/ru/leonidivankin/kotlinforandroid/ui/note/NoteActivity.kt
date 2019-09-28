@@ -82,8 +82,8 @@ class NoteActivity : BaseActivity<Note?, NoteViewState>() {
 
     private fun initView(){
         if(note != null){
-//            et_title.setText(note!!.title)
             et_body.setText(note!!.text)
+            et_title.setText(note!!.title)
 
             val color = when (note!!.color) {
                 Note.Color.WHITE -> R.color.white
@@ -116,7 +116,6 @@ class NoteActivity : BaseActivity<Note?, NoteViewState>() {
 
         note?.let{
             viewModel.save(it)
-
         }
     }
 

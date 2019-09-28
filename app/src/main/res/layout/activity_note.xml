@@ -12,12 +12,10 @@
         android:padding="16dp"
         app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
-
-
         <com.google.android.material.textfield.TextInputLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="Заголовок">
+            android:hint="@string/str_title">
 
             <EditText
                 android:id="@+id/et_title"
@@ -29,14 +27,13 @@
         <com.google.android.material.textfield.TextInputLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="Текст">
+            android:hint="@string/str_text">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/et_body"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content" />
         </com.google.android.material.textfield.TextInputLayout>
-
 
     </LinearLayout>
 
