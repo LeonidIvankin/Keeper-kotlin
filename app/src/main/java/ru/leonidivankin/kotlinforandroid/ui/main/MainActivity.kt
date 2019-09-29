@@ -6,12 +6,9 @@ import android.os.Bundle
 import android.view.Menu
 import android.view.MenuInflater
 import android.view.MenuItem
-import androidx.appcompat.app.AppCompatActivity
-import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.GridLayoutManager
 import com.firebase.ui.auth.AuthUI
-import com.google.android.gms.auth.api.Auth
 import kotlinx.android.synthetic.main.activity_main.*
 import ru.leonidivankin.kotlinforandroid.R
 import ru.leonidivankin.kotlinforandroid.data.entity.Note
@@ -21,8 +18,8 @@ import ru.leonidivankin.kotlinforandroid.ui.splash.SplashActivity
 
 class MainActivity : BaseActivity<List<Note>?, MainViewState>(), LogoutDialog.LogoutListener {
 
-    companion object{
-        fun start(context: Context) = Intent(context, MainActivity::class.java).run{
+    companion object {
+        fun start(context: Context) = Intent(context, MainActivity::class.java).run {
             context.startActivity(this)
         }
     }
@@ -58,15 +55,15 @@ class MainActivity : BaseActivity<List<Note>?, MainViewState>(), LogoutDialog.Lo
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean = MenuInflater(this)
-            .inflate(R.menu.main, menu)
+            .inflate(R.menu.menu_main, menu)
             .let{true}
 
-    override fun onOptionsItemSelected(item: MenuItem): Boolean  = when(item.itemId){
-        R.id.logout -> showLogoutDialog().let{true}
+    override fun onOptionsItemSelected(item: MenuItem): Boolean = when (item.itemId) {
+        R.id.logout -> showLogoutDialog().let { true }
         else -> false
     }
 
-    private fun showLogoutDialog(){
+    private fun showLogoutDialog() {
         supportFragmentManager
                 .findFragmentByTag(LogoutDialog.TAG) ?: LogoutDialog.createInstance()
                 .show(supportFragmentManager, LogoutDialog.TAG)

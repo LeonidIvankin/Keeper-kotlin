@@ -1,6 +1,5 @@
 package ru.leonidivankin.kotlinforandroid.ui.base
 
-import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
@@ -14,7 +13,7 @@ import ru.leonidivankin.kotlinforandroid.data.errors.NoAuthException
 abstract class BaseActivity<T, S : BaseViewState<T>> : AppCompatActivity() {
 
 
-    companion object{
+    companion object {
         private const val RC_SIGN_IN = 4242
     }
 
@@ -51,7 +50,7 @@ abstract class BaseActivity<T, S : BaseViewState<T>> : AppCompatActivity() {
         }
     }
 
-    private fun startLogin(){
+    private fun startLogin() {
         val provider = listOf(
                 AuthUI.IdpConfig.GoogleBuilder().build()
         )
@@ -66,7 +65,7 @@ abstract class BaseActivity<T, S : BaseViewState<T>> : AppCompatActivity() {
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        if(requestCode == RC_SIGN_IN && resultCode != Activity.RESULT_OK){
+        if (requestCode == RC_SIGN_IN && resultCode != Activity.RESULT_OK) {
             finish()
         }
 

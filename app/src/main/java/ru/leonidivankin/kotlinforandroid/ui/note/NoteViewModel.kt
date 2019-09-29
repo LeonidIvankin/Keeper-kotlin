@@ -1,7 +1,5 @@
 package ru.leonidivankin.kotlinforandroid.ui.note
 
-import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModel
 import ru.leonidivankin.kotlinforandroid.data.NotesRepository
 import ru.leonidivankin.kotlinforandroid.data.entity.Note
 import ru.leonidivankin.kotlinforandroid.data.model.NoteResult
@@ -16,20 +14,20 @@ class NoteViewModel : BaseViewModel<Note?, NoteViewState>() {
 
     private var pendingNote: Note? = null
 
-    fun save(note: Note){
+    fun save(note: Note) {
         pendingNote = note
     }
 
     override fun onCleared() {
-        if(pendingNote != null){
+        if (pendingNote != null) {
             NotesRepository.saveNote(pendingNote!!)
         }
     }
 
-    fun loadNote(noteId: String){
-        NotesRepository.getNoteById(noteId).observeForever{
-            if(it == null) return@observeForever
-            when(it){
+    fun loadNote(noteId: String) {
+        NotesRepository.getNoteById(noteId).observeForever {
+            if (it == null) return@observeForever
+            when (it) {
                 is NoteResult.Success<*> ->
                     viewStateLiveData.value = NoteViewState(note = it.data as? Note)
                 is NoteResult.Error ->

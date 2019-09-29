@@ -2,6 +2,7 @@ package ru.leonidivankin.kotlinforandroid.ui.splash
 
 import android.os.Handler
 import androidx.lifecycle.ViewModelProviders
+import ru.leonidivankin.kotlinforandroid.R
 import ru.leonidivankin.kotlinforandroid.ui.base.BaseActivity
 import ru.leonidivankin.kotlinforandroid.ui.main.MainActivity
 
@@ -31,7 +32,7 @@ class SplashActivity : BaseActivity<Boolean?, SplashViewState>() {
         }
     }
 
-    private fun startMainActivity(){
+    private fun startMainActivity() {
         MainActivity.start(this)
         finish()
     }

@@ -7,7 +7,7 @@ import androidx.fragment.app.DialogFragment
 
 class LogoutDialog : DialogFragment() {
 
-    companion object{
+    companion object {
         val TAG = LogoutDialog::class.java.name + "TAG"
         fun createInstance() = LogoutDialog()
     }
@@ -16,12 +16,12 @@ class LogoutDialog : DialogFragment() {
             AlertDialog.Builder(context!!)
                     .setTitle("Выход")
                     .setMessage("Вы уверены?")
-                    .setPositiveButton("Да"){_, _ -> (activity as LogoutListener).onLogout()}
-                    .setNegativeButton("Нет"){_, _ -> dismiss()}
+                    .setPositiveButton("Да") { _, _ -> (activity as LogoutListener).onLogout() }
+                    .setNegativeButton("Нет") { _, _ -> dismiss() }
                     .create()
 
 
-    interface LogoutListener{
+    interface LogoutListener {
         fun onLogout()
     }
 }

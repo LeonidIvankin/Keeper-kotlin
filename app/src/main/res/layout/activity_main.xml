@@ -8,12 +8,14 @@
 
     <com.google.android.material.appbar.AppBarLayout
         android:id="@+id/appbar"
+        android:theme="@style/AppTheme.AppBarOverlay"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
         <androidx.appcompat.widget.Toolbar
             android:id="@+id/toolbar"
-            android:layout_width="wrap_content"
+            android:gravity="center_vertical|end"
+            android:layout_width="match_parent"
             app:layout_scrollFlags="scroll|enterAlways"
             app:titleTextColor="@android:color/white"
             android:layout_height="?attr/actionBarSize"
@@ -24,6 +26,7 @@
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rv_notes"
+        android:padding="8dp"
         app:layout_behavior="@string/appbar_scrolling_view_behavior"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />

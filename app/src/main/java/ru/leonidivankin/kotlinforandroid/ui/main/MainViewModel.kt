@@ -9,10 +9,10 @@ import ru.leonidivankin.kotlinforandroid.ui.base.BaseViewModel
 
 class MainViewModel : BaseViewModel<List<Note>?, MainViewState>() {
 
-    private val notesObserver = Observer<NoteResult>{
-        if(it == null) return@Observer
+    private val notesObserver = Observer<NoteResult> {
+        if (it == null) return@Observer
 
-        when(it){
+        when (it) {
             is NoteResult.Success<*> ->
                 viewStateLiveData.value = MainViewState(notes = it.data as? List<Note>)
             is NoteResult.Error ->
@@ -33,7 +33,6 @@ class MainViewModel : BaseViewModel<List<Note>?, MainViewState>() {
     }
 
     fun viewState(): LiveData<MainViewState> = viewStateLiveData
-
 
 
 }
