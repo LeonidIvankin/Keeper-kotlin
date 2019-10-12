@@ -6,17 +6,18 @@ import android.os.Bundle
 import android.view.Menu
 import android.view.MenuInflater
 import android.view.MenuItem
-import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.GridLayoutManager
 import com.firebase.ui.auth.AuthUI
 import kotlinx.android.synthetic.main.activity_main.*
+import org.jetbrains.anko.alert
+import org.koin.android.viewmodel.ext.android.viewModel
 import ru.leonidivankin.kotlinforandroid.R
 import ru.leonidivankin.kotlinforandroid.data.entity.Note
 import ru.leonidivankin.kotlinforandroid.ui.base.BaseActivity
 import ru.leonidivankin.kotlinforandroid.ui.note.NoteActivity
 import ru.leonidivankin.kotlinforandroid.ui.splash.SplashActivity
 
-class MainActivity : BaseActivity<List<Note>?, MainViewState>(), LogoutDialog.LogoutListener {
+class MainActivity : BaseActivity<List<Note>?, MainViewState>() {
 
     companion object {
         fun start(context: Context) = Intent(context, MainActivity::class.java).run {
@@ -24,9 +25,7 @@ class MainActivity : BaseActivity<List<Note>?, MainViewState>(), LogoutDialog.Lo
         }
     }
 
-    override val viewModel: MainViewModel by lazy {
-        ViewModelProviders.of(this).get(MainViewModel::class.java)
-    }
+    override val viewModel: MainViewModel by viewModel()
 
     override val layoutRes = R.layout.activity_main
 
@@ -64,12 +63,15 @@ class MainActivity : BaseActivity<List<Note>?, MainViewState>(), LogoutDialog.Lo
     }
 
     private fun showLogoutDialog() {
-        supportFragmentManager
-                .findFragmentByTag(LogoutDialog.TAG) ?: LogoutDialog.createInstance()
-                .show(supportFragmentManager, LogoutDialog.TAG)
+        alert {
+            titleResource = R.string.logout_dialog_title
+            messageResource = R.string.logout_dialog_message
+            positiveButton(R.string.note_ok) { onLogout() }
+            negativeButton(R.string.logout_dialog_cancel) { it.dismiss() }
+        }.show()
     }
 
-    override fun onLogout() {
+    fun onLogout() {
         AuthUI.getInstance()
                 .signOut(this)
                 .addOnSuccessListener {

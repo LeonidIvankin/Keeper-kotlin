@@ -5,4 +5,11 @@
     <string name="str_title">Заголовок</string>
     <string name="str_text">Текст</string>
     <string name="menu_logout">LogOut</string>
+    <string name="delete_str">Удалить</string>
+    <string name="note_delete_message">Удалить заметку?</string>
+    <string name="note_delete_cancel">Отмена</string>
+    <string name="note_ok">Ок</string>
+    <string name="logout_dialog_title">logout_dialog_title</string>
+    <string name="logout_dialog_message">logout_dialog_message</string>
+    <string name="logout_dialog_cancel">logout_dialog_cancel</string>
 </resources>

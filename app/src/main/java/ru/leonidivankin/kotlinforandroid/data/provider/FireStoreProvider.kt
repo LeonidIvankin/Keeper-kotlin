@@ -10,7 +10,7 @@ import ru.leonidivankin.kotlinforandroid.data.errors.NoAuthException
 import ru.leonidivankin.kotlinforandroid.data.model.NoteResult
 import timber.log.Timber
 
-class FireStoreProvider : RemoteDataProvider {
+class FireStoreProvider(private val firebaseAuth: FirebaseAuth, private val store: FirebaseFirestore) : RemoteDataProvider {
 
     companion object {
         private const val NOTES_COLLECTION = "notes"
@@ -18,11 +18,10 @@ class FireStoreProvider : RemoteDataProvider {
 
     }
 
-    private val store by lazy { FirebaseFirestore.getInstance() }
     private val notesReference by lazy { store.collection(NOTES_COLLECTION) }
 
     private val currentUser
-        get() = FirebaseAuth.getInstance().currentUser
+        get() = firebaseAuth.currentUser
 
 
     override fun getCurrentUser(): LiveData<User?> = MutableLiveData<User>().apply {
@@ -83,6 +82,17 @@ class FireStoreProvider : RemoteDataProvider {
             value = NoteResult.Error(e)
         }
 
+    }
+
+    override fun deleteNote(id: String): LiveData<NoteResult> {
+        return MutableLiveData<NoteResult>().apply {
+            getUserNotesCollection().document(id).delete()
+                    .addOnSuccessListener {
+                        value = NoteResult.Success(null)
+                    }.addOnFailureListener {
+                        value = NoteResult.Error(it)
+                    }
+        }
     }
 
 

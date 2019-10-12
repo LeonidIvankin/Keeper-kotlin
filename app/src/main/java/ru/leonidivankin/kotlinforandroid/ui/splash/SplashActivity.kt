@@ -1,8 +1,7 @@
 package ru.leonidivankin.kotlinforandroid.ui.splash
 
 import android.os.Handler
-import androidx.lifecycle.ViewModelProviders
-import ru.leonidivankin.kotlinforandroid.R
+import org.koin.android.viewmodel.ext.android.viewModel
 import ru.leonidivankin.kotlinforandroid.ui.base.BaseActivity
 import ru.leonidivankin.kotlinforandroid.ui.main.MainActivity
 
@@ -12,9 +11,7 @@ class SplashActivity : BaseActivity<Boolean?, SplashViewState>() {
         private const val START_DELAY = 1000L
     }
 
-    override val viewModel: SplashViewModel by lazy {
-        ViewModelProviders.of(this).get(SplashViewModel::class.java)
-    }
+    override val viewModel: SplashViewModel by viewModel()
 
     override val layoutRes: Int? = null
 
