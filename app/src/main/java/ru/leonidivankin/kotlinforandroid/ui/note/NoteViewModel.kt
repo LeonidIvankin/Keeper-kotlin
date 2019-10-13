@@ -1,47 +1,53 @@
 package ru.leonidivankin.kotlinforandroid.ui.note
 
+import androidx.annotation.VisibleForTesting
+import androidx.lifecycle.Observer
 import ru.leonidivankin.kotlinforandroid.data.NotesRepository
 import ru.leonidivankin.kotlinforandroid.data.entity.Note
 import ru.leonidivankin.kotlinforandroid.data.model.NoteResult
 import ru.leonidivankin.kotlinforandroid.ui.base.BaseViewModel
 
-class NoteViewModel(private val notesRepository: NotesRepository) : BaseViewModel<Note?, NoteViewState>() {
+open class NoteViewModel(private val notesRepository: NotesRepository) :
+        BaseViewModel<NoteViewState.Data, NoteViewState>() {
 
     init {
         viewStateLiveData.value = NoteViewState()
     }
 
-
-    private var pendingNote: Note? = null
+    private val pendingNote: Note?
+        get() = viewStateLiveData.value?.data?.note
 
     fun save(note: Note) {
-        pendingNote = note
+        viewStateLiveData.value = NoteViewState(NoteViewState.Data(note = note))
     }
 
-    override fun onCleared() {
-        if (pendingNote != null) {
-            notesRepository.saveNote(pendingNote!!)
+    @VisibleForTesting
+    public override fun onCleared() {
+        pendingNote?.let {
+            notesRepository.saveNote(it)
         }
     }
 
     fun loadNote(noteId: String) {
-        notesRepository.getNoteById(noteId).observeForever {
-            if (it == null) return@observeForever
-            when (it) {
-                is NoteResult.Success<*> -> viewStateLiveData.value = NoteViewState(note = it.data as? Note)
-                is NoteResult.Error -> viewStateLiveData.value = NoteViewState(error = it.error)
-            }
-        }
+        notesRepository.getNoteById(noteId).observeForever(
+                Observer<NoteResult> {
+                    if (it == null) return@Observer
+
+                    viewStateLiveData.value = when (it) {
+                        is NoteResult.Success<*> -> NoteViewState(NoteViewState.Data(note = it.data as? Note))
+                        is NoteResult.Error -> NoteViewState(error = it.error)
+                    }
+                })
     }
 
     fun deleteNote() {
         pendingNote?.let {
             notesRepository.deleteNote(it.id).observeForever { result ->
                 result?.let {
-                    //                    viewStateLiveData.value = when (result) {
-//                        is NoteResult.Success<*> -> NoteViewState(isDeleted = true)
-//                        is NoteResult.Error -> NoteViewState(error = result.error)
-//                    }
+                    viewStateLiveData.value = when (result) {
+                        is NoteResult.Success<*> -> NoteViewState(NoteViewState.Data(isDeleted = true))
+                        is NoteResult.Error -> NoteViewState(error = result.error)
+                    }
                 }
             }
         }

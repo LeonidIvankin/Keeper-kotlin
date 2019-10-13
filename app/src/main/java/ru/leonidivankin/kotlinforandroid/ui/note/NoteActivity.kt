@@ -15,14 +15,13 @@ import ru.leonidivankin.kotlinforandroid.data.entity.Note
 import ru.leonidivankin.kotlinforandroid.ui.base.BaseActivity
 import ru.leonidivankin.kotlinforandroid.ui.common.format
 import ru.leonidivankin.kotlinforandroid.ui.common.getColorInt
-import timber.log.Timber
 import java.util.*
 import kotlin.contracts.ExperimentalContracts
 
-class NoteActivity : BaseActivity<Note?, NoteViewState>() {
+class NoteActivity : BaseActivity<NoteViewState.Data, NoteViewState>() {
 
     companion object {
-        private val EXTRA_NOTE = "EXTRA_NOTE"
+        private val EXTRA_NOTE = NoteActivity::class.java.name + "extra.NOTE"
         private const val DATE_TIME_FORMAT = "dd.MM.yy HH:mm"
 
         fun start(context: Context, note: Note? = null) {
@@ -32,7 +31,6 @@ class NoteActivity : BaseActivity<Note?, NoteViewState>() {
                 }
             }
             context.startActivity(intent)
-
         }
     }
 
@@ -42,18 +40,13 @@ class NoteActivity : BaseActivity<Note?, NoteViewState>() {
     override val viewModel: NoteViewModel by viewModel()
 
     val textChangeListener = object : TextWatcher {
-        override fun afterTextChanged(p0: Editable?) {
+        override fun afterTextChanged(s: Editable?) {
             saveNote()
         }
 
-        override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
-        }
-
-        override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
-        }
-
+        override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
+        override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
     }
-
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -69,35 +62,34 @@ class NoteActivity : BaseActivity<Note?, NoteViewState>() {
     }
 
     @ExperimentalContracts
-    override fun renderData(data: Note?) {
-        this.note = data
-        supportActionBar?.title = note?.let {
-            it.lastChanged.format(DATE_TIME_FORMAT)
+    override fun renderData(data: NoteViewState.Data) {
+        if (data.isDeleted) finish()
+        this.note = data.note
+        supportActionBar?.title = note?.let { note ->
+            note.lastChanged.format(DATE_TIME_FORMAT)
         } ?: getString(R.string.new_note_title)
-
         initView()
     }
 
     private fun initView() {
-
         et_title.removeTextChangedListener(textChangeListener)
         et_body.removeTextChangedListener(textChangeListener)
 
         note?.let { note ->
-            et_body.setText(note.text)
             et_title.setText(note.title)
+            et_body.setText(note.text)
             toolbar.setBackgroundColor(note.color.getColorInt(this))
         }
 
         et_title.addTextChangedListener(textChangeListener)
         et_body.addTextChangedListener(textChangeListener)
 
-        colorPicker.onColorClickListener = {
-            color = it
+
+        colorPicker.onColorClickListener = { color ->
+            this.color = color
             toolbar.setBackgroundColor(color.getColorInt(this))
             saveNote()
         }
-
     }
 
     private fun saveNote() {
@@ -112,22 +104,24 @@ class NoteActivity : BaseActivity<Note?, NoteViewState>() {
         ) ?: Note(
                 UUID.randomUUID().toString(),
                 et_title.text.toString(),
-                et_body.text.toString())
+                et_body.text.toString()
+        )
 
         note?.let { viewModel.save(it) }
     }
 
     override fun onCreateOptionsMenu(menu: Menu?) = menuInflater.inflate(R.menu.menu_note, menu).let { true }
 
+
     override fun onOptionsItemSelected(item: MenuItem): Boolean = when (item.itemId) {
-        android.R.id.home -> super.onBackPressed().let { true }
-        R.id.note_delete -> deleteNote().let { true }
+        android.R.id.home -> onBackPressed().let { true }
         R.id.note_select_color -> togglePallete().let { true }
+        R.id.note_delete -> deleteNote().let { true }
         else -> super.onOptionsItemSelected(item)
     }
 
+
     private fun togglePallete() {
-        Timber.d("togglePallete")
         if (colorPicker.isOpen) {
             colorPicker.close()
         } else {

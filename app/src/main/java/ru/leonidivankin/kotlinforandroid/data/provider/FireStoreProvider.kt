@@ -18,8 +18,6 @@ class FireStoreProvider(private val firebaseAuth: FirebaseAuth, private val stor
 
     }
 
-    private val notesReference by lazy { store.collection(NOTES_COLLECTION) }
-
     private val currentUser
         get() = firebaseAuth.currentUser
 
@@ -84,16 +82,15 @@ class FireStoreProvider(private val firebaseAuth: FirebaseAuth, private val stor
 
     }
 
-    override fun deleteNote(id: String): LiveData<NoteResult> {
-        return MutableLiveData<NoteResult>().apply {
-            getUserNotesCollection().document(id).delete()
-                    .addOnSuccessListener {
-                        value = NoteResult.Success(null)
-                    }.addOnFailureListener {
-                        value = NoteResult.Error(it)
-                    }
-        }
+    override fun deleteNote(noteId: String) = MutableLiveData<NoteResult>().apply {
+        getUserNotesCollection().document(noteId).delete()
+                .addOnSuccessListener {
+                    value = NoteResult.Success(null)
+                }.addOnFailureListener {
+                    value = NoteResult.Error(it)
+                }
     }
+
 
 
 }
