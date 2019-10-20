@@ -18,7 +18,7 @@ import ru.leonidivankin.kotlinforandroid.ui.common.getColorInt
 import java.util.*
 import kotlin.contracts.ExperimentalContracts
 
-class NoteActivity : BaseActivity<NoteViewState.Data, NoteViewState>() {
+class NoteActivity : BaseActivity<NoteData>() {
 
     companion object {
         private val EXTRA_NOTE = NoteActivity::class.java.name + "extra.NOTE"
@@ -62,7 +62,7 @@ class NoteActivity : BaseActivity<NoteViewState.Data, NoteViewState>() {
     }
 
     @ExperimentalContracts
-    override fun renderData(data: NoteViewState.Data) {
+    override fun renderData(data: NoteData) {
         if (data.isDeleted) finish()
         this.note = data.note
         supportActionBar?.title = note?.let { note ->

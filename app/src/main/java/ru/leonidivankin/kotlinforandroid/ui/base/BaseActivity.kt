@@ -5,21 +5,28 @@ import android.content.Intent
 import android.os.Bundle
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import androidx.lifecycle.Observer
 import com.firebase.ui.auth.AuthUI
+import kotlinx.coroutines.*
+import kotlinx.coroutines.channels.consumeEach
 import ru.leonidivankin.kotlinforandroid.R
 import ru.leonidivankin.kotlinforandroid.data.errors.NoAuthException
+import kotlin.coroutines.CoroutineContext
 
-abstract class BaseActivity<T, S : BaseViewState<T>> : AppCompatActivity() {
+abstract class BaseActivity<T> : AppCompatActivity(), CoroutineScope {
 
+    override val coroutineContext: CoroutineContext by lazy {
+        Dispatchers.Main + Job()
+    }
 
     companion object {
         private const val RC_SIGN_IN = 4242
     }
 
-    abstract val viewModel: BaseViewModel<T, S>
-    abstract val layoutRes: Int?
+    private lateinit var dataJob: Job
+    private lateinit var errorJob: Job
 
+    abstract val viewModel: BaseViewModel<T>
+    abstract val layoutRes: Int?
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -27,16 +34,32 @@ abstract class BaseActivity<T, S : BaseViewState<T>> : AppCompatActivity() {
             setContentView(it)
         }
 
-        viewModel.getViewState().observe(this, Observer<S> {
-            if (it == null) return@Observer
-            if (it.error != null) {
-                renderError(it.error)
-                return@Observer
+    }
+
+    override fun onStart() {
+        super.onStart()
+        dataJob = launch {
+            viewModel.getViewState().consumeEach {
+                renderData(it)
             }
+        }
 
+        errorJob = launch {
+            viewModel.getErrorChannel().consumeEach {
+                renderError(it)
+            }
+        }
+    }
 
-            renderData(it.data)
-        })
+    override fun onStop() {
+        super.onStop()
+        dataJob.cancel()
+        errorJob.cancel()
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        coroutineContext.cancel()
     }
 
     abstract fun renderData(data: T)
@@ -68,7 +91,6 @@ abstract class BaseActivity<T, S : BaseViewState<T>> : AppCompatActivity() {
         if (requestCode == RC_SIGN_IN && resultCode != Activity.RESULT_OK) {
             finish()
         }
-
     }
 
     protected fun showError(message: String) {

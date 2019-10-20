@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">KotlinForAndroid</string>
+    <string name="app_name">Keeper</string>
     <string name="new_note_title">Новая заметка</string>
     <string name="main_title">Заметки</string>
     <string name="str_title">Заголовок</string>

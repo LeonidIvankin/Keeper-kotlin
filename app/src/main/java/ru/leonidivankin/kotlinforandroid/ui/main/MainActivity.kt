@@ -17,7 +17,7 @@ import ru.leonidivankin.kotlinforandroid.ui.base.BaseActivity
 import ru.leonidivankin.kotlinforandroid.ui.note.NoteActivity
 import ru.leonidivankin.kotlinforandroid.ui.splash.SplashActivity
 
-class MainActivity : BaseActivity<List<Note>?, MainViewState>() {
+class MainActivity : BaseActivity<List<Note>?>() {
 
     companion object {
         fun start(context: Context) = Intent(context, MainActivity::class.java).run {
